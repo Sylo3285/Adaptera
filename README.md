@@ -16,16 +16,30 @@ A local-first LLM orchestration library with native support for Hugging Face, PE
 - **Model Transparency**: Easy access to the underlying Hugging Face model and tokenizer.
 
 ## Installation
-
+---
+> **As of now**
+- No python module for this has not been released yet, install using github like this:
+---
 ### Using pip
 ```bash
-pip install torch transformers peft bitsandbytes faiss-cpu numpy
+# Clone the repository
+git clone https://github.com/Sylo/Adaptera.git
+cd Adaptera
+
+# Install dependencies in editable mode
+pip install .
 ```
 
-### Using Conda/Miniforge
+### Using Anaconda/Miniforge
 ```bash
-conda install pytorch torchvision torchaudio cpuonly -c pytorch
-conda install -c conda-forge transformers peft bitsandbytes faiss numpy
+conda activate < ENV NAME >
+
+# Clone the repository
+git clone https://github.com/Sylo/Adaptera.git
+cd Adaptera
+
+# Install dependencies in editable mode
+pip install .
 ```
 
 *(Note: Requires Python 3.12+)*
