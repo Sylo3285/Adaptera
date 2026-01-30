@@ -19,7 +19,7 @@ We recommend using `Miniforge` or `Conda` for environment management.
 
 ```bash
 # Clone the repository
-git clone https://github.com/Sylo/Adaptera.git
+git clone https://github.com/Sylo3285/Adaptera
 cd Adaptera
 
 # Install dependencies in editable mode

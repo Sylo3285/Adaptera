@@ -23,7 +23,7 @@ A local-first LLM orchestration library with native support for Hugging Face, PE
 ### Using pip
 ```bash
 # Clone the repository
-git clone https://github.com/Sylo/Adaptera.git
+git clone https://github.com/Sylo3285/Adaptera
 cd Adaptera
 
 # Install dependencies in editable mode
@@ -35,7 +35,7 @@ pip install .
 conda activate < ENV NAME >
 
 # Clone the repository
-git clone https://github.com/Sylo/Adaptera.git
+git clone https://github.com/Sylo3285/Adaptera
 cd Adaptera
 
 # Install dependencies in editable mode
