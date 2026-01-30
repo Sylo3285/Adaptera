@@ -10,7 +10,15 @@ authors = [{name = "Sylo", email = ""}]
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "torch>=2.0.0",
+    "transformers>=4.40.0",
+    "peft>=0.10.0",
+    "accelerate>=0.29.0",
+    "bitsandbytes>=0.43.0",
+    "numpy>=1.24.0",
+    "faiss-cpu>=1.8.0",
+]
 keywords = ["llm", "orchestration", "local-first", "ai", "machine-learning"]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -22,8 +30,7 @@ classifiers = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest"]
-vector = ["numpy", "faiss-cpu"]  # For vector memory support
+dev = ["pytest", "build", "twine"]
 
 [tool.setuptools.packages.find]
 where = ["."]

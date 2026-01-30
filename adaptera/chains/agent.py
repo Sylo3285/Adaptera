@@ -51,12 +51,19 @@ Begin!
 
 Question: """
 
-    def run(self, task: str) -> str:
+    def run(self, task: str,
+        min_new_tokens: int = 16,
+        max_new_tokens: int = 128,
+        temperature: float = 0.7,
+        do_sample: bool = True,
+        top_k_memory: int = 5,
+        **kwargs,) -> str:
+        
         prompt = self._get_system_prompt() + task + "\n"
         
         if not self.tools:
             # Direct generation if no tools are available
-            response = self.llm.generate(prompt, max_new_tokens=1024)
+            response = self.llm.generate(prompt, min_new_tokens=min_new_tokens, max_new_tokens=max_new_tokens, temperature=temperature, do_sample=do_sample, top_k_memory=top_k_memory, **kwargs)
             if response.startswith(prompt):
                 response = response[len(prompt):]
             return response.strip()

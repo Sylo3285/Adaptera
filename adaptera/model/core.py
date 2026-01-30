@@ -20,9 +20,34 @@ from adaptera.memory.core import VectorDB
 
 class AdapteraModel:
     """
-    Stateful Hugging Face causal LM with optional PEFT adapters
-    and optional persistent memory (VectorDB) with automatic embeddings.
+    Stateful Hugging Face causal language model with optional PEFT adapters
+    and optional persistent vector memory.
+
+    This class wraps a causal LM and keeps model state alive across calls,
+    supporting quantization, adapters, and long-term memory via VectorDB.
+
+    Args:
+        model_name (str):
+            Name or local path of the Hugging Face model.
+
+        peft_adapter (str | None, optional):
+            Path to a PEFT adapter (LoRA / QLoRA). If None, no adapter is loaded.
+
+        quantization (str | None, optional):
+            Quantization method to use. One of: "4bit", "8bit", or None.
+
+        device_map (str, optional):
+            Device mapping strategy for model loading.
+            Defaults to "auto".
+
+        torch_dtype (torch.dtype | None, optional):
+            Torch dtype for model weights (e.g. torch.float16).
+
+        vector_db (VectorDB | None, optional):
+            Optional persistent vector database for long-term memory,
+            using `adaptera.VectorDB`.
     """
+
 
     def __init__(
         self,
@@ -93,7 +118,8 @@ class AdapteraModel:
     def generate(
         self,
         prompt: str,
-        max_new_tokens: int = 256,
+        min_new_tokens: int = 16,
+        max_new_tokens: int = 128,
         temperature: float = 0.7,
         do_sample: bool = True,
         top_k_memory: int = 5,
@@ -120,7 +146,7 @@ class AdapteraModel:
         with torch.inference_mode():
             output_ids = self.model.generate(
                 **inputs,
-                min_new_tokens=20,
+                min_new_tokens=min_new_tokens,
                 max_new_tokens=max_new_tokens,
                 temperature=temperature,
                 do_sample=do_sample,

@@ -1,6 +1,65 @@
-# Adaptera
+# Adaptera 🌌
 
 A local-first LLM orchestration library with native support for Hugging Face, PEFT/LoRA, QLoRA, and API models — without hiding the model.
+
+## Features
+
+- **Local-First**: Built for running LLMs on your own hardware efficiently.
+- **Native PEFT/QLoRA**: Seamless integration with Hugging Face's PEFT for efficient model loading.
+- **Persistent Memory**: Vector-based memory using FAISS with automatic text embedding (SLM).
+- **Strict ReAct Agents**: Deterministic agent loops using JSON-based tool calls.
+- **Model Transparency**: Easy access to the underlying Hugging Face model and tokenizer.
+
+## Installation
+
+### Using pip
+```bash
+pip install torch transformers peft bitsandbytes faiss-cpu numpy
+```
+
+### Using Conda/Miniforge
+```bash
+conda install pytorch torchvision torchaudio cpuonly -c pytorch
+conda install -c conda-forge transformers peft bitsandbytes faiss numpy
+```
+
+*(Note: Requires Python 3.12+)*
+
+## Quick Start
+
+```python
+from adaptera import Agent, AdapteraModel, VectorDB, Tool
+
+# 1. Initialize Vector Memory
+db = VectorDB(index_file="memory.index")
+
+# 2. Load a Model (with 4-bit quantization)
+model = AdapteraModel(
+    model_name="unsloth/Llama-3.2-3B-Instruct",
+    quantization="4bit",
+    vector_db=db
+)
+
+# 3. Define Tools
+def add(a, b):
+    """Adds two numbers together"""
+    return a + b
+
+tools = [
+    Tool(name="add", func=add, description="Adds two numbers together. Input: 'a,b'")
+]
+
+# 4. Create and Run Agent
+agent = Agent(model, tools=tools)
+print(agent.run("What is 15 + 27?"))
+```
+
+## Project Structure
+
+- `adaptera/chains/`: Agentic workflows and ReAct implementations.
+- `adaptera/model/`: Hugging Face model loading and generation wrappers.
+- `adaptera/memory/`: FAISS-backed persistent vector storage.
+- `adaptera/tools/`: Tool registry and definition system.
 
 ## Non-goals
 
