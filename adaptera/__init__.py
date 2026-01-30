@@ -1,0 +1,1 @@
+"""Adaptera: A local-first LLM orchestration library."""
