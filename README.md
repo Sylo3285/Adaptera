@@ -18,7 +18,7 @@ A local-first LLM orchestration library with native support for Hugging Face, PE
 ## Installation
 ---
 > **As of now**
-- No python module for this has not been released yet, install using github like this:
+- Python module for this has not been released yet, install using github like this:
 ---
 ### Using pip
 ```bash
