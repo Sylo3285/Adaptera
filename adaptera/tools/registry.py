@@ -1,10 +1,16 @@
-"""Tool registration system.
+"""Tool registration system."""
 
-TODO: Implement tool registration and execution.
-"""
+from typing import Any, Callable, Dict, List
+from dataclasses import dataclass
 
 
-class ToolRegistry:
-    def __init__(self):
-        # TODO: Initialize registry
-        pass
+@dataclass
+class Tool:
+    """A tool that can be called by an agent."""
+    name: str
+    func: Callable[..., Any]
+    description: str
+
+    def __call__(self, *args, **kwargs) -> Any:
+        """Call the tool function."""
+        return self.func(*args, **kwargs)
