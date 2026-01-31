@@ -6,7 +6,7 @@ Now supports file-backed persistence out-of-the-box and automatic embeddings via
 """
 
 from __future__ import annotations
-from typing import Any, List, Optional, Tuple
+from typing import Any, List, Optional
 import numpy as np
 import faiss
 import pickle

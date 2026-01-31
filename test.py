@@ -6,7 +6,7 @@ db.add("You were made by Sylo.")
 """
 model = AdapteraModel(
     model_name ="unsloth/Llama-3.2-3B-Instruct",
-    quantization="4bit",
+    quantization="8bit",
     vector_db=db
     )
 

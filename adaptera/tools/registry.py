@@ -1,6 +1,6 @@
 """Tool registration system."""
 
-from typing import Any, Callable, Dict, List
+from typing import Any, Callable
 from dataclasses import dataclass
 
 
