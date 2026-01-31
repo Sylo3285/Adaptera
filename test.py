@@ -28,10 +28,10 @@ tools = [
 agent = Agent(model, tools=tools)
 del model
 
-"""print(agent.run("What is the sum of 2 and 5",max_new_tokens=50,min_new_tokens=10))
+print(agent.run("What is the sum of 2 and 5",max_new_tokens=50,min_new_tokens=10))
 print(agent.run("What is the result of subtracting 10 from 25",max_new_tokens=50,min_new_tokens=10))
 print(agent.run("What is an apple? Give me a long answer.",max_new_tokens=50,min_new_tokens=10))
 print(agent.run("What is 15 plus 30 minus 10?",max_new_tokens=50,min_new_tokens=10))
-print(agent.run("who are you?",max_new_tokens=50,min_new_tokens=10))"""
+print(agent.run("who are you?",max_new_tokens=50,min_new_tokens=10))
 
 print(agent.run("who made you?",max_new_tokens=50,min_new_tokens=10))
