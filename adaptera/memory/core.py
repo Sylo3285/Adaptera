@@ -105,8 +105,9 @@ class VectorDB:
         """
         # Auto-embed text if a string is passed
         if isinstance(vectors, str):
+            text = vectors
             vectors = self._embed_text(vectors)
-            metadata = metadata or [None]
+            metadata = metadata or [text]
 
         vectors = np.asarray(vectors, dtype=np.float32)
         if vectors.ndim != 2 or vectors.shape[1] != self.dim:

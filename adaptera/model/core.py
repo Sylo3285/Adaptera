@@ -120,6 +120,7 @@ class AdapteraModel:
         prompt: str,
         min_new_tokens: int = 16,
         max_new_tokens: int = 128,
+        top_p: float = 0.9,
         temperature: float = 0.7,
         do_sample: bool = True,
         top_k_memory: int = 5,
@@ -134,8 +135,7 @@ class AdapteraModel:
 
         # --- Retrieve memory if enabled ---
         if self.use_memory and self.memory is not None:
-            query_embedding = self._embed_text(prompt)  # shape (1, dim)
-            retrieved = self.memory.search(query_embedding, top_k=top_k_memory)
+            retrieved = self.retrieve_from_memory(self._embed_text(prompt), top_k=top_k_memory)
             # Flatten and concatenate context (ignore None metadata)
             context = "\n".join(str(meta) for _, meta in retrieved if meta is not None)
             if context:
@@ -143,17 +143,25 @@ class AdapteraModel:
 
         # --- Tokenize and generate ---
         inputs = self.tokenizer(full_prompt, return_tensors="pt").to(self.model.device)
+        input_len = inputs["input_ids"].shape[1]
+
         with torch.inference_mode():
             output_ids = self.model.generate(
                 **inputs,
                 min_new_tokens=min_new_tokens,
                 max_new_tokens=max_new_tokens,
+                pad_token_id=self.tokenizer.eos_token_id,
+                eos_token_id=self.tokenizer.eos_token_id,
+                top_p = top_p,
                 temperature=temperature,
                 do_sample=do_sample,
+                repetition_penalty=1.1,
                 **kwargs,
             )
 
-        return self.tokenizer.decode(output_ids[0], skip_special_tokens=True)
+        generated_ids = output_ids[0][input_len:]
+        return self.tokenizer.decode(generated_ids, skip_special_tokens=True)
+
 
     # ------------------------------------------------------------------
     # Memory helper methods
@@ -171,6 +179,7 @@ class AdapteraModel:
         pooled = (last_hidden * mask).sum(dim=1) / mask.sum(dim=1)
         return pooled.detach().cpu()  # shape (1, dim)
 
+    #placeholder function
     def add_to_memory(self, vectors: torch.Tensor, metadata: Optional[List[Any]] = None):
         """Add embeddings to the VectorDB."""
         if self.memory is None:
