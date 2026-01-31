@@ -16,30 +16,16 @@ A local-first LLM orchestration library with native support for Hugging Face, PE
 - **Model Transparency**: Easy access to the underlying Hugging Face model and tokenizer.
 
 ## Installation
----
-> **As of now**
-- Python module for this has not been released yet, install using github like this:
----
-### Using pip
-```bash
-# Clone the repository
-git clone https://github.com/Sylo3285/Adaptera
-cd Adaptera
 
-# Install dependencies in editable mode
-pip install .
+### Using python
+```bash
+pip install adaptera
 ```
 
 ### Using Anaconda/Miniforge
 ```bash
 conda activate < ENV NAME >
-
-# Clone the repository
-git clone https://github.com/Sylo3285/Adaptera
-cd Adaptera
-
-# Install dependencies in editable mode
-pip install .
+pip install adaptera
 ```
 
 *(Note: Requires Python 3.12+)*
