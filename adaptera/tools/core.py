@@ -6,7 +6,13 @@ from dataclasses import dataclass
 
 @dataclass
 class Tool:
-    """A tool that can be called by an agent."""
+    """A tool that can be called by an agent.
+    
+    Args:
+        name (str): The name of the tool.
+        func (Callable[..., Any]): The function that implements the tool.
+        description (str): A description of the tool.
+    """
     name: str
     func: Callable[..., Any]
     description: str

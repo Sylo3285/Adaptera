@@ -1,6 +1,6 @@
 # Adaptera 🌌
 
-A local-first LLM orchestration library with native support for Hugging Face, PEFT/LoRA, QLoRA, and API models — without hiding the model.
+A local-first LLM orchestration library with native support for Hugging Face, PEFT/LoRA, QLoRA — without hiding the model and giving advanced users the full control.
 
 ---
 > **Note:** This project is in its early development phase and may undergo significant changes. However, the core goal of providing local LLM processing will remain consistent. Once the agentic part of the module is stable, we will work on making a fine-tuner for it so that this library can be used as a quick way of prototyping local agentic models.

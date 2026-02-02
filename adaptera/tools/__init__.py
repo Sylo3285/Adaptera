@@ -1,5 +1,5 @@
 """Tool registration and management."""
 
-from .registry import Tool
+from .core import Tool
 
 __all__ = ["Tool"]

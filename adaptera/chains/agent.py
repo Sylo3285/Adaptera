@@ -1,20 +1,38 @@
 from typing import Any, List, Optional
-from ..model.core import AdapteraModel
-from ..tools.registry import Tool
+from adaptera.model.core import AdapteraModel
+from adaptera.tools.core import Tool
 
 
 class Agent:
     """
-    A strict ReAct-style agent using JSON for internal communication.
+    A strict ReAct-style agent.
     Cycles through Thought -> Action -> Action Input -> Observation until Final Answer.
+
+    Args:
+        llm_name (str): Name of the agent.
+        llm (AdapteraModel): The language model to use.
+        tools (Optional[List[Tool]]): A list of tools the agent can use.
+        max_iterations (int): Maximum number of Thought/Action cycles before stopping.
+        description (str): Optional description of the agent's purpose.
+        CORE_SYSTEM_PROMPT (str): Optional custom system prompt for the agent.
+        SAFETY (bool): If True, prevents overriding system prompt with custom CORE_SYSTEM_PROMPT.
     """
 
-    def __init__(self, llm: AdapteraModel, tools: Optional[List[Tool]] = None, max_iterations: int = 5):
+    
+
+    def __init__(self,llm_name: str, llm: AdapteraModel, tools: Optional[List[Tool]] = None, max_iterations: int = 5 , description:str=None,CORE_SYSTEM_PROMPT:str=None,SAFETY:bool=True):
+        self.name = llm_name
         self.llm = llm
         self.tools = {tool.name: tool for tool in tools} if tools else {}
         self.max_iterations = max_iterations
+        self.description = description
+        self.CORE_SYSTEM_PROMPT = CORE_SYSTEM_PROMPT
+        self.SAFETY = SAFETY # Safety flag for system prompt usage
+        if self.CORE_SYSTEM_PROMPT and self.SAFETY:
+            print("Using custom CORE_SYSTEM_PROMPT for Agent. This OVERRIDES the default tool description prompt and can lead to unexpected behavior if the format is not followed.")
         
         # ANSI Color Constants
+        self.COLOR_AGENT = "\033[38;5;208m" # New Color
         self.COLOR_THOUGHT = "\033[94m"  # Blue
         self.COLOR_ACTION = "\033[93m"   # Yellow
         self.COLOR_OBSERVATION = "\033[92m" # Green
@@ -60,7 +78,7 @@ Question: """
         top_k_memory: int = 5,
         **kwargs,) -> str:
         
-        prompt = self._get_system_prompt() + task + "\n"
+        prompt = self.CORE_SYSTEM_PROMPT + task + "\n" if self.CORE_SYSTEM_PROMPT and not self.SAFETY else self._get_system_prompt() + task + "\n"
         
         if not self.tools:
             # Direct generation if no tools are available
@@ -82,7 +100,7 @@ Question: """
                 response = response.split("Observation:")[0].strip()
             
             full_output = "Thought: " + response
-            print(f"{self.COLOR_THOUGHT}{full_output}{self.COLOR_RESET}")
+            print(f"{self.COLOR_AGENT}{self.name}{self.COLOR_RESET}: {self.COLOR_THOUGHT}{full_output}{self.COLOR_RESET}")
 
             if "Final Answer:" in response:
                 final_answer = response.split("Final Answer:")[-1].strip()
@@ -96,26 +114,26 @@ Question: """
                     # Strip leading/trailing quotes if model adds them
                     action_input = action_input.strip("\"'")
                     
-                    print(f"{self.COLOR_ACTION}Action: {action_part}{self.COLOR_RESET}")
-                    print(f"{self.COLOR_ACTION}Action Input: {action_input}{self.COLOR_RESET}")
+                    print(f"{self.COLOR_AGENT}{self.name}{self.COLOR_RESET}: {self.COLOR_ACTION}Action: {action_part}{self.COLOR_RESET}")
+                    print(f"{self.COLOR_AGENT}{self.name}{self.COLOR_RESET}: {self.COLOR_ACTION}Action Input: {action_input}{self.COLOR_RESET}")
 
                     if action_part in self.tools:
                         observation = self.call_tool(action_part, action_input)
-                        print(f"{self.COLOR_OBSERVATION}Observation: {observation}{self.COLOR_RESET}")
+                        print(f"{self.COLOR_AGENT}{self.name}{self.COLOR_RESET}: {self.COLOR_OBSERVATION}Observation: {observation}{self.COLOR_RESET}")
                         intermediate_steps += response + f"\nObservation: {observation}\n"
                     else:
                         error_msg = f"Tool '{action_part}' is not available. Please answer directly or use available tools: [{', '.join(self.tools.keys())}]."
-                        print(f"{self.COLOR_ERROR}{error_msg}{self.COLOR_RESET}")
+                        print(f"{self.COLOR_AGENT}{self.name}{self.COLOR_RESET}: {self.COLOR_ERROR}{error_msg}{self.COLOR_RESET}")
                         intermediate_steps += response + f"\nObservation: {error_msg}\n"
                         
                 except Exception as e:
                     error_msg = "Error parsing Action/Action Input. Use the format: Action: [tool] then Action Input: [input]."
-                    print(f"{self.COLOR_ERROR}{error_msg}{self.COLOR_RESET}")
+                    print(f"{self.COLOR_AGENT}{self.name}{self.COLOR_RESET}: {self.COLOR_ERROR}{error_msg}{self.COLOR_RESET}")
                     intermediate_steps += response + f"\nObservation: {error_msg}\n"
             else:
                 # If neither Final Answer nor Action is present, nudge the model
                 error_msg = "Please provide either an 'Action:' or a 'Final Answer:'."
-                print(f"{self.COLOR_ERROR}{error_msg}{self.COLOR_RESET}")
+                print(f"{self.COLOR_AGENT}{self.name}{self.COLOR_RESET}: {self.COLOR_ERROR}{error_msg}{self.COLOR_RESET}")
                 intermediate_steps += response + f"\nObservation: {error_msg}\n"
 
         return "Reached maximum iterations without a final answer."
