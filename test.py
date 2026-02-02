@@ -1,6 +1,16 @@
 from adaptera import AdapteraModel,VectorDB,Agent,Tool
 from adaptera.experimental.multiagent import MultiAgent
 
+"""
+This is a test script to demonstrate a multi-agent system using Adaptera.
+This was used in the development of this project and attempts to show best approaches.
+
+Things in this script may change or be removed in future versions.
+Things also may not be documented fully here as this is a test script.
+Certain parts of this script may be experimental and not part of the main Adaptera package.
+
+"""
+
 db = VectorDB()
 
 model = AdapteraModel(

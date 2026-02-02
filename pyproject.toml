@@ -15,7 +15,6 @@ dependencies = [
     "transformers>=4.40.0",
     "peft>=0.10.0",
     "accelerate>=0.29.0",
-    "bitsandbytes>=0.43.0",
     "numpy>=1.24.0",
     "faiss-cpu>=1.8.0",
 ]

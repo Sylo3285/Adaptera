@@ -65,6 +65,7 @@ print(agent.run("What is 15 + 27?"))
 - `adaptera/model/`: Hugging Face model loading and generation wrappers.
 - `adaptera/memory/`: FAISS-backed persistent vector storage.
 - `adaptera/tools/`: Tool registry and definition system.
+- `adaptera/experimental/`: Experimental features 
 
 ## Non-goals
 
