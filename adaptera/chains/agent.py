@@ -158,6 +158,10 @@ Question: """
                     except ValueError:
                         processed_args.append(arg)
                 return tool.func(*processed_args)
+            
+            #if the tool input is empty call it directly
+            elif tool_input.strip() == "" or tool_input is None or tool_input.lower() == "none" or tool_input.lower() == "None":
+                return tool.func()
             else:
                 clean_input = tool_input.strip().strip("\"'")
                 try:
