@@ -44,7 +44,7 @@ def divide(a,b):
 tools1 = [
     Tool(name="add", func=add, description="Adds two numbers together. Input should be in the format: 'a,b' where a and b are numbers."),
     Tool(name="subtract", func=subtract, description="Subtracts b from a. Input should be in the format: 'a,b' where a and b are numbers.")
-]
+] 
 
 tools2 = [
     Tool(name="multiply", func=multiply, description="Multiplies two numbers together. Input should be in the format: 'a,b' where a and b are numbers."),
