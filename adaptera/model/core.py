@@ -4,11 +4,13 @@ Optional persistent memory via VectorDB for retrieval-augmented prompts.
 Uses a small transformer (MiniLM) for automatic embeddings if memory is provided.
 """
 
+import os
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, AutoModel
 from peft import PeftModel
 from typing import Any, List, Optional
 
+os.environ["TRANSFORMERS_VERBOSITY"] = "error"
 try:
     from transformers import BitsAndBytesConfig
     _BNB_AVAILABLE = True
@@ -179,7 +181,6 @@ class AdapteraModel:
         pooled = (last_hidden * mask).sum(dim=1) / mask.sum(dim=1)
         return pooled.detach().cpu()  # shape (1, dim)
 
-    #placeholder function
     def add_to_memory(self, vectors: torch.Tensor, metadata: Optional[List[Any]] = None):
         """Add embeddings to the VectorDB."""
         if self.memory is None:

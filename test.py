@@ -1,5 +1,8 @@
 from adaptera import AdapteraModel,VectorDB,Agent,Tool
 from adaptera.experimental.multiagent import MultiAgent
+import adaptera
+
+adaptera.about()
 
 """
 This is a test script to demonstrate a multi-agent system using Adaptera.
@@ -17,7 +20,7 @@ model = AdapteraModel(
     model_name ="unsloth/Llama-3.2-3B-Instruct",
     quantization="4bit",
     vector_db=db
-    )
+)
 
 def add(a,b):
     "Adds 2 numbers together"

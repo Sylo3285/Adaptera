@@ -34,29 +34,45 @@ pip install adaptera
 
 ```python
 from adaptera import Agent, AdapteraModel, VectorDB, Tool
+db = VectorDB()
+```
 
-# 1. Initialize Vector Memory
-db = VectorDB(index_file="memory.index")
-
-# 2. Load a Model (with 4-bit quantization)
+```python
 model = AdapteraModel(
-    model_name="unsloth/Llama-3.2-3B-Instruct",
+    model_name ="unsloth/Llama-3.2-3B-Instruct",
     quantization="4bit",
     vector_db=db
 )
 
-# 3. Define Tools
-def add(a, b):
-    """Adds two numbers together"""
+model.generate("What is an apple?")
+```
+
+```python
+def add(a,b):
+    "Adds 2 numbers together"
+    print(f"Adding {a} and {b} via tool call")
     return a + b
 
-tools = [
-    Tool(name="add", func=add, description="Adds two numbers together. Input: 'a,b'")
-]
+def subtract(a,b):
+    "Subtracts b from a"
+    print(f"Subtracting {b} from {a} via tool call")
+    return a - b
 
-# 4. Create and Run Agent
-agent = Agent(model, tools=tools)
-print(agent.run("What is 15 + 27?"))
+tools = [
+    Tool(name="add", func=add, description="Adds two numbers together. Input should be in the format: 'a,b' where a and b are numbers."),
+    Tool(name="subtract", func=subtract, description="Subtracts b from a. Input should be in the format: 'a,b' where a and b are numbers.")
+] 
+```
+
+```python
+agent = Agent(
+    "AddSubtract_Agent",
+    model, 
+    tools=tools,
+    description = "An agent for only addition and subtraction tasks."
+)
+
+agent.run("what is 1+1?")
 ```
 
 ## Project Structure
