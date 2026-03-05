@@ -28,6 +28,5 @@ Agent
  ├── Planner
  ├── Executor
  ├── Verifier
- ├── ToolRegistry
  └── Scheduler
 ```
