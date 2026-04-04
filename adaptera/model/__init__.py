@@ -1,4 +1,4 @@
 """Model implementations for various LLM backends."""
-from .core import AdapteraModel
+from .core import AdapteraHFModel, AdapteraLMSModel , AdapteraModel
 
-__all__ = ["AdapteraModel"]
+__all__ = ["AdapteraHFModel , AdapteraLMSModel , AdapteraModel"]

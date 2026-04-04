@@ -1,5 +1,5 @@
 from typing import Any, List, Optional
-from adaptera.model.core import AdapteraModel
+from adaptera.model.core import AdapteraHFModel , AdapteraLMSModel
 from adaptera.tools.core import Tool
 
 
@@ -10,7 +10,7 @@ class Agent:
 
     Args:
         llm_name (str): Name of the agent.
-        llm (AdapteraModel): The language model to use.
+        llm (AdapteraHFModel): The language model to use.
         tools (Optional[List[Tool]]): A list of tools the agent can use.
         max_iterations (int): Maximum number of Thought/Action cycles before stopping.
         description (str): Optional description of the agent's purpose.
@@ -20,8 +20,9 @@ class Agent:
 
     
 
-    def __init__(self,llm_name: str, llm: AdapteraModel, tools: Optional[List[Tool]] = None, max_iterations: int = 5 , description:str=None,CORE_SYSTEM_PROMPT:str=None,SAFETY:bool=True):
+    def __init__(self,llm_name: str, llm: AdapteraHFModel | AdapteraLMSModel, tools: Optional[List[Tool]] = None, max_iterations: int = 5 , description:str=None,CORE_SYSTEM_PROMPT:str=None,SAFETY:bool=True):
         self.name = llm_name
+        self.model_type = type(llm)
         self.llm = llm
         self.tools = {tool.name: tool for tool in tools} if tools else {}
         self.max_iterations = max_iterations
@@ -69,6 +70,16 @@ Begin!
 
 Question: """
 
+    def _choose_model_and_generate(self,prompt,min_new_tokens=1,max_new_tokens=512,temperature=1,do_sample=False,top_p=3,top_k_memory=3,**kwargs):
+        if self.model_type == AdapteraHFModel:
+            response = self.llm.generate(prompt, min_new_tokens=min_new_tokens, max_new_tokens=max_new_tokens, temperature=temperature, do_sample=do_sample, top_p=top_p, top_k_memory=top_k_memory, **kwargs)
+        elif self.model_type == AdapteraLMSModel:
+            response = self.llm.generate(prompt)
+        else:
+            raise ValueError("Model must be either AdapteraHFModel or AdapteraLMSModel")
+        
+        return response.strip()
+
     def run(self, task: str,
         min_new_tokens: int = 16,
         max_new_tokens: int = 128,
@@ -81,17 +92,15 @@ Question: """
         prompt = self.CORE_SYSTEM_PROMPT + task + "\n" if self.CORE_SYSTEM_PROMPT and not self.SAFETY else self._get_system_prompt() + task + "\n"
         
         if not self.tools:
-            # Direct generation if no tools are available
-            response = self.llm.generate(prompt, min_new_tokens=min_new_tokens, max_new_tokens=max_new_tokens, temperature=temperature, do_sample=do_sample, top_p=top_p, top_k_memory=top_k_memory, **kwargs)
-            if response.startswith(prompt):
-                response = response[len(prompt):]
+            response = self._choose_model_and_generate(prompt,min_new_tokens,max_new_tokens,temperature,do_sample,top_p,top_k_memory,**kwargs)
             return response.strip()
 
         intermediate_steps = ""
         for i in range(self.max_iterations):
             current_prompt = prompt + intermediate_steps + "Thought: "
             
-            response = self.llm.generate(current_prompt, max_new_tokens=512)
+            response = self._choose_model_and_generate(current_prompt,min_new_tokens=min_new_tokens,max_new_tokens=max_new_tokens,top_p=top_p,top_k_memory=top_k_memory,temperature=temperature,do_sample=do_sample,**kwargs)
+
             if response.startswith(current_prompt):
                 response = response[len(current_prompt):]
             

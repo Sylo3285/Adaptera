@@ -1,12 +1,15 @@
-from adaptera.model.core import AdapteraModel
+from adaptera.model.core import AdapteraHFModel , AdapteraLMSModel
 from adaptera.tools.core import Tool
 from adaptera.experimental.experimental_agent import Agent
 
 def test_planner():
-    model = AdapteraModel(
+    """model = AdapteraHFModel(
     model_name ="unsloth/Llama-3.2-3B-Instruct",
     quantization="4bit"
-    )
+    )"""
+
+    model = AdapteraLMSModel()
+
 
     def add(a,b):
         "Adds 2 numbers together"

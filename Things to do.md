@@ -6,7 +6,16 @@
 - Optimize/Overhaul agent class|❌ (IN PROGRESS)
 - Add Stricter parsing      |❌ (IN PROGRESS)
 
+# Things that have beem done:
+- Added LM Studio Model support
+- Added fine-tuning for AdapteraHFModels with peft and quantization along with optional Mahoraga's adaptation sound
+- Added about.py which will guide people to a discord server for community help if needed and to my youtube channel can be used via import adaptera ; adaptera.about()
+- Depreciated AdapteraModel
+- Added experimental agent and multiagent inside the experimental/ dir
 
+
+
+# other plans
 
 ```bash
 User Goal

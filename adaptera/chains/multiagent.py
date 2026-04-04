@@ -1,5 +1,5 @@
 from typing import List
-from adaptera.model.core import AdapteraModel
+from adaptera.model.core import AdapteraHFModel
 from adaptera.chains.agent import Agent
 from adaptera.tools.core import Tool
 
@@ -20,7 +20,7 @@ class MultiAgent:
     to decide which agent to delegate to or when to output final answer.
     """
 
-    def __init__(self, agents: List[Agent], coordinator_model: AdapteraModel = None):
+    def __init__(self, agents: List[Agent], coordinator_model: AdapteraHFModel = None):
         if not agents:
             raise ValueError("At least one agent must be provided.")
         if not coordinator_model:

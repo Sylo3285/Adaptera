@@ -1,5 +1,5 @@
-from adaptera import AdapteraModel,VectorDB,Agent,Tool
-from adaptera.experimental.multiagent import MultiAgent
+from adaptera import AdapteraHFModel,AdapteraLMSModel,VectorDB,Agent,Tool
+from adaptera.chains.multiagent import MultiAgent
 import adaptera
 
 adaptera.about()
@@ -16,11 +16,13 @@ Certain parts of this script may be experimental and not part of the main Adapte
 
 db = VectorDB()
 
-model = AdapteraModel(
-    model_name ="unsloth/Llama-3.2-3B-Instruct",
+model = AdapteraHFModel(
+    model_id ="unsloth/Llama-3.2-3B-Instruct",
     quantization="4bit",
     vector_db=db
 )
+
+#model = AdapteraLMSModel()
 
 def add(a,b):
     "Adds 2 numbers together"
